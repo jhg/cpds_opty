@@ -10,15 +10,15 @@ init(Value) ->
 entry(Value, Time) ->
     receive
         {read, Ref, From} ->
-            io:format("[Reference ~w]: ~w from ~w at time ~w~n", [Ref, Value, From, Time]),
+            From ! {Ref, self(), Value, Time}
             entry(Value, Time);
         {write, New} ->
-            entry(New, make_ref());  %% TODO: COMPLETE
+            entry(New, make_ref());  %% TODO: done
         {check, Ref, Readtime, From} ->
             if 
-                Readtime == Ref ->   %% TODO: COMPLETE
-                    io:format("[Reference ~w] has the same timestamp~n");
-                true -> %% from Victoria shouldnt this be false???
+                Readtime == Time ->   %% TODO:  done
+                    From ! {Ref, ok}
+                true -> 
                     From ! {Ref, abort}
             end,
             entry(Value, Time);

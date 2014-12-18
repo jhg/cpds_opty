@@ -15,7 +15,7 @@ validator() ->
                     update(Writes),
                     Client ! {Ref, ok};
                 abort ->
-                    %% TODO: ADD SOME CODE
+                    Client ! {Ref, abort}; %% TODO: done
             end,
             validator();
         _Old ->
@@ -37,7 +37,7 @@ send_checks(Reads) ->
     Self = self(),
     N = length(Reads),
     lists:map(fun({Entry, Time}) -> 
-                  %% TODO: ADD SOME CODE
+                    Entry ! {check, Tag, Time, Self} %% TODO: done
                   end, 
               Reads),
     {N, Tag}.

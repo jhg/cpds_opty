@@ -10,9 +10,8 @@ init(Client, Validator, Store) ->
 handler(Client, Validator, Store, Reads, Writes) ->         
     receive
         {read, Ref, N} ->
-            case lists:keyfind(N, 1, ...) of  %% TODO: COMPLETE
+            case lists:keyfind(N, 1, Writes) of  %% TODO: done
                 {N, _, Value} ->
-                    
                     handler(Client, Validator, Store, Reads, Writes);
                 false ->
                     %% TODO: ADD SOME CODE
@@ -27,7 +26,8 @@ handler(Client, Validator, Store, Reads, Writes) ->
             Added = lists:keystore(N, 1, ..., {N, ..., ...}),
             handler(Client, Validator, Store, Reads, Added);
         {commit, Ref} ->
-            %% TODO: ADD SOME CODE
+            %% TODO: done
+            Validator ! {validate, Ref, Reads, Writes, Client}
         abort ->
             ok
     end.
