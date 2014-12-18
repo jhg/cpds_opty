@@ -1,5 +1,5 @@
 -module(entry).
--export([new/1]).
+-export([new/1, entry/2]).
 
 new(Value) ->
     spawn_link(fun() -> init(Value) end).
@@ -17,7 +17,7 @@ entry(Value, Time) ->
         {check, Ref, Readtime, From} ->
             if 
                 Readtime == Time ->   %% TODO:  done
-                    From ! {Ref, ok}
+                    From ! {Ref, ok};
                 true -> 
                     From ! {Ref, abort}
             end,
