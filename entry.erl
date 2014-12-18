@@ -10,7 +10,7 @@ init(Value) ->
 entry(Value, Time) ->
     receive
         {read, Ref, From} ->
-            From ! {Ref, self(), Value, Time}
+            From ! {Ref, self(), Value, Time},
             entry(Value, Time);
         {write, New} ->
             entry(New, make_ref());  %% TODO: done

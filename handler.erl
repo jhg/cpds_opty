@@ -14,20 +14,20 @@ handler(Client, Validator, Store, Reads, Writes) ->
                 {N, _, Value} ->
                     handler(Client, Validator, Store, Reads, Writes);
                 false ->
-                    %% TODO: ADD SOME CODE
-                    %% TODO: ADD SOME CODE
+                    Entry = store:lookup(N, Store), %% TODO: done
+                    Entry ! {read, Ref, self()}, %% TODO: done
                     handler(Client, Validator, Store, Reads, Writes)
             end;
         {Ref, Entry, Value, Time} ->
-            %% TODO: ADD SOME CODE HERE AND COMPLETE NEXT LINE
-            handler(Client, Validator, Store, [...|Reads], Writes);
+            Client ! {value, Ref, Value}, %% TODO: done
+            handler(Client, Validator, Store, [{Entry, Time}|Reads], Writes);
         {write, N, Value} ->
-            %% TODO: ADD SOME CODE HERE AND COMPLETE NEXT LINE
-            Added = lists:keystore(N, 1, ..., {N, ..., ...}),
+            Entry = store:lookup(N, Store), %% TODO: (ADD SOME CODE HERE AND COMPLETE NEXT LINE) not sure about this!!!
+            Added = lists:keystore(N, 1, Writes, {N, Entry, Value}),
             handler(Client, Validator, Store, Reads, Added);
         {commit, Ref} ->
             %% TODO: done
-            Validator ! {validate, Ref, Reads, Writes, Client}
+            Validator ! {validate, Ref, Reads, Writes, Client};
         abort ->
             ok
     end.

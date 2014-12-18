@@ -12,7 +12,7 @@ init(N) ->
 server(Validator, Store) ->
     receive 
         {open, Client} ->
-            Client ! {transaction, Validator, Store} %% TODO: done
+            Client ! {transaction, Validator, Store}, %% TODO: done
             server(Validator, Store);
         stop ->
             store:stop(Store)

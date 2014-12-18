@@ -15,7 +15,7 @@ validator() ->
                     update(Writes),
                     Client ! {Ref, ok};
                 abort ->
-                    Client ! {Ref, abort}; %% TODO: done
+                    Client ! {Ref, abort} %% TODO: done
             end,
             validator();
         _Old ->
@@ -24,7 +24,7 @@ validator() ->
     
 update(Writes) ->
     lists:map(fun({_, Entry, Value}) -> 
-                  %% TODO: ADD SOME CODE
+                  Entry ! {write, Value} %% TODO: done
                   end, 
               Writes).
 
