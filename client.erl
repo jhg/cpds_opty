@@ -16,12 +16,26 @@ open(Name, Entries, Updates, Server, Total, Ok) ->
             ok;
         {transaction, Validator, Store} ->
             Handler = handler:start(self(), Validator, Store),
+            %%Defining subset of entries for client
+            Subset = choose_random_entries_subset(Entries, Entries/3, []),
             do_transactions(Name, Entries, Updates, Server, Handler,
-                            Total, Ok, Updates)
+                            Total, Ok, Updates, Subset)
     end.
 
+choose_random_entries_subset(_, 0, Subset) ->
+  Subset;
+
+choose_random_entries_subset(Entries, Size, Subset) ->
+  Entry = random:uniform(Entries),
+  case lists:member(Entry, Subset) of
+    true ->
+      choose_random_entries_subset(Entries, Size, Subset);
+    false ->
+      choose_random_entries_subset(Entries, Size-1, [Entry|Subset])
+  end.
+
 % Commit transaction
-do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, 0) ->
+do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, 0, _) ->
     %io:format("~w: Commit: TOTAL ~w, OK ~w~n", [Name, Total, Ok]),
     %timer:sleep(Name*10),
     Ref = make_ref(),
@@ -35,14 +49,28 @@ do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, 0) ->
     end;
 
 % Reads and Writes
-do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, N) ->
+do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, N, Subset) ->
     %io:format("~w: R/W: TOTAL ~w, OK ~w, N ~w~n", [Name, Total, Ok, N]),
     Ref = make_ref(),
-    Num = random:uniform(Entries),
+    %Num = random:uniform(Entries),
+    Num = choose_random_entry(Subset),
     Handler ! {read, Ref, Num},
     Value = receiveValue(Ref),
     Handler ! {write, Num, Value+1},
-    do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, N-1).
+    do_transactions(Name, Entries, Updates, Server, Handler, Total, Ok, N-1, Subset).
+
+choose_random_entry(Subset) ->
+  SubsetLength = length(Subset),
+  Num = random:uniform(SubsetLength),
+  get_entry_at_pos(Num, Subset, 1).
+
+get_entry_at_pos(Pos, [H|T], CurrentPos) ->
+  if
+    Pos == CurrentPos ->
+      H;
+    true ->
+      get_entry_at_pos(Pos, T, CurrentPos+1)
+  end.
 
 receiveCommitValue(Ref) ->
     receive
