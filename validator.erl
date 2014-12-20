@@ -36,10 +36,7 @@ send_checks(Reads) ->
     Tag = make_ref(),
     Self = self(),
     N = length(Reads),
-    lists:map(fun({Entry, Time}) -> 
-                    Entry ! {check, Tag, Time, Self} %% TODO: done
-                  end, 
-              Reads),
+    lists:map(fun({Entry, Time}) ->  Entry ! {check, Tag, Time, Self} end, Reads), %% TODO: done
     {N, Tag}.
 
 check_reads(N, Tag) ->

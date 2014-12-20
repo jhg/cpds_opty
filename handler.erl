@@ -12,6 +12,7 @@ handler(Client, Validator, Store, Reads, Writes) ->
         {read, Ref, N} ->
             case lists:keyfind(N, 1, Writes) of  %% TODO: done
                 {N, _, Value} ->
+                    Client ! {value, Ref, Value}, %% TODO: done
                     handler(Client, Validator, Store, Reads, Writes);
                 false ->
                     Entry = store:lookup(N, Store), %% TODO: done
