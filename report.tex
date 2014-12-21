@@ -18,34 +18,106 @@ During this lab, we implemented a transaction server using optimistic concurrenc
  
 \section{Work done}
 
-We have completed the code files provided to correctly implement the algorithm. Our source code consists of two folders: src and src-sep. The first one contains the Erlang files implementing the Opty algorithm with both the server and the clients starting in the same Erlang environment. The files are divided into three folders: one for the first three experiments (\textit{i}, \textit{ii}, \textit{iii}), one for the fourth experiment (\textit{iv}) and one for the fifth experiment (\textit{v}). In the folder src-sep we have modules to give the possibility to start the server in one machine and the clients in another.\\
-To start the algorithm locally you have to call the function start of module opty with four arguments in the following order: number of clients, number of entries, number of updates and duration of experiments. For example: opty:start(3,4,1,1). With this command the Opty algorithm will start with three clients, and a store with four entries, one write operation. \\
+We have completed the code files provided to correctly implement the algorithm. Our source code can be found in the src folder. To start the algorithm locally you have to call the function \textit{start} of module \textit{opty} with six arguments in the following order: number of clients, number of entries, number of updates, number of reads, duration of experiments and size of the subset of entries to be used by each client. For example: opty:start(3,4,1,1,5,2). With this command the Opty algorithm will start with three clients, and a store with four entries, one write operation, one read operation, with a duration of 5 seconds and a subset of 2 entries out of the total provided. \\
 To start the algorithm with the server and clients in different Erlang nodes you first have to start two different Erlang environments. For example:
 \begin{itemize}
 \item In one terminal type erl -sname optyserver. This will represent an Erlang node name optyserver@server.\\
 \item In another different terminal type erl -sname clients. This will represent a Erlang node name clients@server.\\
 \end{itemize}\\
 %
-To start the clients you have to call the function start\_sep\_clients of module opty\_sep with four arguments: number of clients, number of entries, number of updates and duration of experiments and the name of the server’s node. For example: opty\_sep:start\_sep\_clients(3, 4, 1, 1, optyserver@server).\\
-In a similar way to start the clients you have to call the function start\_sep\_server of module opty\_sep with one argument, the name of the clients' node. For example: opty\_ sep:start\_sep\_server(clients@server).\\\\
+First we start the server in the node optyserver@server with the command \textit{opty:start\_server(10)}, where 10 is the number of entries. To start the clients you have to call, in the clients node, the function \textit{start\_clients} of module \textit{opty} with seven arguments: number of clients, number of entries, number of updates, number of reads, duration of experiments, the name of the server’s node and the size of the subset of entries. For example: 
+\textit{opty:start\_clients(5, 10, 1, 1, 5, optyserver@server, 3)}.\\
 
 \section{Experiments}
 
 \textbf{In the same machine:}\\\\
 \textbf{i)} different number of concurrent clients in the system;\\
 We ran the following commands to see how the algorithm runs:\\
+\begin{itemize}
+\item opty:start(1,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-i-1.png} \\
+\item opty:start(5,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-i-2.png} \\
+\item opty:start(10,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-i-3.png} \\
+\item opty:start(20,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-i-4.png} \\
+\item opty:start(40,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-i-5.png} \\
+\item opty:start(80,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-i-6a.png} \\
+\includegraphics[scale=0.5]{images/exp-i-6b.png} \\
+\end{itemize}
 %
 \textbf{ii)} different number of entries in the store;\\
 We ran the following commands to see how the algorithm runs:\\
+\begin{itemize}
+\item opty:start(5,1,1,1,1,1)\\
+\includegraphics[scale=0.5]{images/exp-ii-1.png} \\
+\item opty:start(5,3,1,1,1,3)\\
+\includegraphics[scale=0.5]{images/exp-ii-2.png} \\
+\item opty:start(5,5,1,1,1,5)\\
+\includegraphics[scale=0.5]{images/exp-ii-3.png} \\
+\item opty:start(5,10,1,1,1,10)\\
+\includegraphics[scale=0.5]{images/exp-ii-4.png} \\
+\item opty:start(5,100,1,1,1,100)\\
+\includegraphics[scale=0.5]{images/exp-ii-5.png} \\
+\item opty:start(5,1000,1,1,1,1000)\\
+\includegraphics[scale=0.5]{images/exp-ii-6.png} \\
+\end{itemize}
 %
 \textbf{iii)} different number of write operations per transaction;\\
 We ran the following commands to see how the algorithm runs:\\
+\begin{itemize}
+\item opty:start(5,10,1,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-iii-1.png} \\
+\item opty:start(5,10,5,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-iii-2.png} \\
+\item opty:start(5,10,10,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-iii-3.png} \\
+\item opty:start(5,10,20,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-iii-4.png} \\
+\item opty:start(5,10,40,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-iii-5.png} \\
+\item opty:start(5,10,80,1,5,3)\\
+\includegraphics[scale=0.5]{images/exp-iii-6.png} \\
+\end{itemize}
 %
 \textbf{iv)} different ratio of read and write operations per transaction;\\
 We ran the following commands to see how the algorithm runs:\\
+\begin{itemize}
+\item opty:start(5,10,2,4,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-1.png} \\
+\item opty:start(5,10,4,2,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-2.png} \\
+\item opty:start(5,10,3,9,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-3.png} \\
+\item opty:start(5,10,9,3,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-4.png} \\
+\item opty:start(5,10,1,10,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-5.png} \\
+\item opty:start(5,10,10,1,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-6.png} \\
+\item opty:start(5,10,1,100,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-7.png} \\
+\item opty:start(5,10,100,1,1,5)\\
+\includegraphics[scale=0.5]{images/exp-iv-8.png} \\
+\end{itemize}
 %
 \textbf{v)} different percentage of accessed entries with respect to the total number of entries;\\
-We ran the following commands to see how the algorithm runs:\\\\
+We ran the following commands to see how the algorithm runs:\\
+\begin{itemize}
+\item opty:start(5,10,2,2,1,2)\\
+\includegraphics[scale=0.5]{images/exp-v-1.png} \\
+\item opty:start(5,10,2,2,1,3)\\
+\includegraphics[scale=0.5]{images/exp-v-2.png} \\
+\item opty:start(5,10,2,2,1,4)\\
+\includegraphics[scale=0.5]{images/exp-v-3.png} \\
+\item opty:start(5,10,2,2,1,5)\\
+\includegraphics[scale=0.5]{images/exp-v-4.png} \\
+\item opty:start(5,10,2,2,1,8)\\
+\includegraphics[scale=0.5]{images/exp-v-5.png} \\
+\end{itemize}
 
 \textbf{In different machines:}\\\\
 
