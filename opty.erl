@@ -23,16 +23,16 @@ start_server(Entries) ->
 
 start_clients(Clients, Entries, Updates, Reads, Time, ServerNode, NSubset) ->
   L = startClients_sep(Clients, [], Entries, Updates, Reads, ServerNode, NSubset),
-  io:format("Starting: ~w CLIENTS, ~w ENTRIES, ~w UPDATES PER TRANSACTION, ~w SIZE OF SUBSET OF ENTRIES,
-    DURATION ~w s ~n", [Clients, Entries, Updates, NSubset, Time]),
+  io:format("Starting: ~w CLIENTS, ~w ENTRIES, ~w UPDATES PER TRANSACTION, ~w READS PER TRANSACTION, ~w SIZE OF SUBSET OF ENTRIES,
+    DURATION ~w s ~n", [Clients, Entries, Updates, Reads, NSubset, Time]),
   timer:sleep(Time*1000),
   stop_sep(L, ServerNode).
 
 start(Clients, Entries, Updates, Reads, Time, NSubset) ->
     register(s, server:start(Entries)),
     L = startClients(Clients, [], Entries, Updates, Reads, NSubset),
-    io:format("Starting: ~w CLIENTS, ~w ENTRIES, ~w UPDATES PER TRANSACTION, ~w SIZE OF SUBSET OF ENTRIES,
-    DURATION ~w s ~n", [Clients, Entries, Updates, NSubset, Time]),
+    io:format("Starting: ~w CLIENTS, ~w ENTRIES, ~w UPDATES PER TRANSACTION, ~w READS PER TRANSACTION, ~w SIZE OF SUBSET OF ENTRIES,
+    DURATION ~w s ~n", [Clients, Entries, Updates, Reads, NSubset, Time]),
     timer:sleep(Time*1000),
     stop(L).
 
