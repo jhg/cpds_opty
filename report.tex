@@ -40,17 +40,20 @@ We ran the following commands to see how the algorithm runs:
 \includegraphics[scale=0.5]{images/exp-i-1.png} \\
 \item opty:start(5,10,1,1,5,3)\\\\
 \includegraphics[scale=0.5]{images/exp-i-2.png} \\
+\newpage
 \item opty:start(10,10,1,1,5,3)\\\\
 \includegraphics[scale=0.5]{images/exp-i-3.png} \\
 \item opty:start(20,10,1,1,5,3)\\\\
 \includegraphics[scale=0.5]{images/exp-i-4.png} \\
+\newpage
 \item opty:start(40,10,1,1,5,3)\\\\
 \includegraphics[scale=0.5]{images/exp-i-5.png} \\
+\newpage
 \item opty:start(80,10,1,1,5,3)\\\\
 \includegraphics[scale=0.4]{images/exp-i-6a.png} \\
 \includegraphics[scale=0.4]{images/exp-i-6b.png} \\
 \end{itemize}
-
+\newpage
 %
 \textbf{ii)} different number of entries in the store;\\\\
 We ran the following commands to see how the algorithm runs:\\
@@ -61,6 +64,7 @@ We ran the following commands to see how the algorithm runs:\\
 \includegraphics[scale=0.5]{images/exp-ii-2.png} \\
 \item opty:start(5,5,1,1,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-ii-3.png} \\
+\newpage
 \item opty:start(5,10,1,1,1,10)\\\\
 \includegraphics[scale=0.5]{images/exp-ii-4.png} \\
 \item opty:start(5,100,1,1,1,100)\\\\
@@ -83,6 +87,7 @@ We ran the following commands to see how the algorithm runs:\\
 \includegraphics[scale=0.5]{images/exp-iii-4.png} \\
 \item opty:start(5,10,40,1,5,3)\\\\
 \includegraphics[scale=0.5]{images/exp-iii-5.png} \\
+\newpage
 \item opty:start(5,10,80,1,5,3)\\\\
 \includegraphics[scale=0.5]{images/exp-iii-6.png} \\
 \end{itemize}
@@ -95,13 +100,13 @@ We ran the following commands to see how the algorithm runs:\\
 \includegraphics[scale=0.5]{images/exp-iv-7.png} \\
 \item opty:start(5,10,1,10,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-iv-5.png} \\
-\item opty:start(5,10,3,9,1,5)\\\\
+\item opty:start(5,10,1,3,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-iv-3.png} \\
-\item opty:start(5,10,2,4,1,5)\\\\
+\item opty:start(5,10,1,2,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-iv-1.png} \\
-\item opty:start(5,10,4,2,1,5)\\\\
+\item opty:start(5,10,2,1,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-iv-2.png} \\
-\item opty:start(5,10,9,3,1,5)\\\\
+\item opty:start(5,10,3,1,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-iv-4.png} \\
 \item opty:start(5,10,10,1,1,5)\\\\
 \includegraphics[scale=0.5]{images/exp-iv-6.png} \\
@@ -118,6 +123,7 @@ We ran the following commands to see how the algorithm runs:\\
 \includegraphics[scale=0.5]{images/exp-v-1.png} \\
 \item opty:start(5,10,2,2,1,3)\\\\
 \includegraphics[scale=0.5]{images/exp-v-2.png} \\
+\newpage
 \item opty:start(5,10,2,2,1,4)\\\\
 \includegraphics[scale=0.5]{images/exp-v-3.png} \\
 \item opty:start(5,10,2,2,1,5)\\\\
@@ -126,13 +132,12 @@ We ran the following commands to see how the algorithm runs:\\
 \includegraphics[scale=0.5]{images/exp-v-5.png} \\
 \end{itemize}
 
-
+\newpage
 \textbf{In different machines:}\\\\
 
 We created the server node: optyserver@localhost and ran the command \textit{opty:start\_server(10)}. Then we created the clients node: clients@localhost and ran the command \textit{opty:start\_clients(5, 10, 1, 1, 5, optyserver@server, 3)}.\\\\
 \includegraphics[scale=0.29]{images/distributed.png} \\\\
 
-\newpage
 \section{Open questions}
 
 \textbf{1)} What is the impact of each of these parameters on the success rate? Is the success rate the same for the different clients?\\
@@ -145,7 +150,7 @@ The success rate is influenced by all of these paramenters:\\
 
 \item For experiment \textit{iii} as expected the more write operations we try to perform the more conflicts arrise forcing transactions to restart and their success rate decreases.\\
 
-\item For experiment \textit{iv} the different ratio of reads and writes doesn't influence as much the success rate as in previous cases.\\
+\item For experiment \textit{iv} we notice that if as we increase the nr of reads to the nr of writes, the success rate decreases (for 1 write we perform 2 reads with a success rate of ~81\%, while if we perform for each 1 write, 100 reads we have a success of ~45\% ) and if we increase the nr of writes to the nr of reads the success rate decreases as well (for 1 read we perform 2 writes with a success rate of ~81\%, while if we perform for each 1 read, 100 writes we have a success rate of ~45\%). We observe that the bigger the difference between the nr of reads and writes the more the success rate will decrease.\\
 
 \item For experiment \textit{v} we can see that as the size of the client's entry subset increases, the number of conflicting transactions increases as well. This happens because with a bigger subset of entries, the likelihood of this subsets to have the same entries as other client's subset increases as well. As the size of the subset increases, each client will ``share'' and perform read and write operations in the ``same'' entry set increasing the probability of arising conflicts between their transactions.\\
 
@@ -154,8 +159,9 @@ The success rate is influenced by all of these paramenters:\\
 %
 \textbf{2)} If we run this in a distributed Erlang network, where is the handler running?\\
 
-In a distributed network the handler runs in the clients node, because each node it's responsible of creating it's own handler. Because of this, when the clients are destroyed so is the handler.\\
+In a distributed network the handler runs in the clients node, because each node is responsible for creating it's own handler. Because of this, when the clients are destroyed so is the handler.\\
 
+\newpage
 \section{Personal opinion}
 During this seminar we got an in depth view of how the Optimistic Concurrency Control algorithm works with backward validation, both locally and in a distributed environment. We are aware that this same algorithm could work with forward validation but it is interesting that thanks to the way in which the code was structured, such modification could be done only by modifying the \textit{validation} module. In our opinion, this lab had the right level of difficulty for this course and the amount of time available to us. \\
 
