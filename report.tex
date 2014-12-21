@@ -1,0 +1,63 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc} % Change according your file encoding
+\usepackage{graphicx}
+\usepackage{url}
+
+%opening
+\title{Seminar Report: Opty}
+\author{Maria Gabriela Valdes and Victoria Beleuta}
+\date{\today{}}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+During this lab, we implemented a transaction server using optimistic concurrency control in Erlang . Opty is a concurrency control method applied to transactional systems such as relational database management systems. It assumes that multiple transactions can complete without interfering with each other, while using data resources without acquiring locks. Before committing, each transaction checks if any other transaction has changed the entry. If it hasn't been changed the transation can commit, if there are conflicts, the transaction rollsback and restarts.
+ 
+\section{Work done}
+
+We have completed the code files provided to correctly implement the algorithm. Our source code consists of two folders: src and src-sep. The first one contains the Erlang files implementing the Opty algorithm with both the server and the clients starting in the same Erlang environment. In the folder src-sep we have modules to give the possibility to start the server in one machine and the clients in another.\\
+To start the algorithm locally you have to call the function start of module opty with four arguments in the following order: number of clients, number of entries, number of updates and duration of experiments. For example: opty:start(3,4,1,1). With this command the Opty algorithm will start with three clients, and a store with four entries, one write operation. \\
+To start the algorithm with the server and clients in different Erlang nodes you first have to start two different Erlang environments. For example:
+\begin{itemize}
+\item In one terminal type erl -sname optyserver. This will represent an Erlang node name optyserver@server.\\
+\item In another different terminal type erl -sname clients. This will represent a Erlang node name clients@server.\\
+\end{itemize}
+
+To start the clients you have to call the function start\_sep\_clients of module opty\_sep with four arguments: number of clients, number of entries, number of updates and duration of experiments and the name of the server’s node. For example: opty\_sep:start\_sep\_clients(3, 4, 1, 1, optyserver@server).\\
+In a similar way to start the clients you have to call the function start\_sep\_server of module opty\_sep with one argument, the name of the clients' node. For example: opty\_ sep:start\_sep\_server(clients@server).\\\\
+
+\section{Experiments}
+
+\textbf{In the same machine:}\\\\
+\textbf{i)} different number of concurrent clients in the system;\\
+We ran the following commands to see how the algorithm runs:\\
+%
+\textbf{ii)} different number of entries in the store;\\
+We ran the following commands to see how the algorithm runs:\\
+%
+\textbf{iii)} different number of write operations per transaction;\\
+We ran the following commands to see how the algorithm runs:\\
+%
+\textbf{iv)} different ratio of read and write operations per transaction;\\
+We ran the following commands to see how the algorithm runs:\\
+%
+\textbf{v)} different percentage of accessed entries with respect to the total number of entries;\\
+We ran the following commands to see how the algorithm runs:\\\\
+
+\textbf{In different machines:}\\\\
+
+
+\section{Open questions}
+
+\textbf{1)} What is the impact of each of these parameters on the success rate? Is the success rate the same for the different clients?\\
+\textbf{2)} If we run this in a distributed Erlang network, where is the handler running?\\
+
+
+\section{Personal opinion}
+
+
+
+\end{document}
